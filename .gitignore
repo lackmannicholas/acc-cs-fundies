@@ -33,3 +33,10 @@
 
 main
 */main
+
+*/.objs
+*.o
+*.d
+.vscode
+*/main
+**/main
