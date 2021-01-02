@@ -17,10 +17,31 @@ using std::endl;
 // Solves the Tower of Hanoi puzzle.
 // (Feel free to call "helper functions" to help you solve the puzzle.)
 void Game::solve() {
-  // Prints out the state of the game:
-  cout << *this << endl;
+  
+  int i = 0;
+  while(i < 100) {
+    i = i +1;
+    // Prints out the state of the game:
+    cout << *this << endl;
 
-  // @TODO -- Finish solving the game!
+    if(moveTop(stacks_[0], stacks_[2]) == 0) continue;
+    if(moveTop(stacks_[0], stacks_[1]) == 0) continue;
+    if(moveTop(stacks_[1], stacks_[2]) == 0) continue;
+    if(moveTop(stacks_[2], stacks_[1]) == 0) continue;
+    if(moveTop(stacks_[2], stacks_[0]) == 0) continue;
+    if(moveTop(stacks_[1], stacks_[0]) == 0) continue;
+    break;
+  }
+}
+
+int Game::moveTop(Stack &stack1, Stack &stack2) {
+  if(stack1.size() > 0) {
+    if(stack2.size() == 0 || stack2.peekTop().getLength() > stack1.peekTop().getLength()) {
+      stack2.push_back(stack1.removeTop());
+      return 0;
+    }
+  }
+  return 1;
 }
 
 // Default constructor to create the initial state:

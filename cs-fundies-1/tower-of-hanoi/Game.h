@@ -19,5 +19,6 @@ class Game {
     friend std::ostream& operator<<(std::ostream & os, const Game & game);
 
   private:
+    int moveTop(Stack &stack1, Stack &stack2);
     std::vector<Stack> stacks_;
 };
