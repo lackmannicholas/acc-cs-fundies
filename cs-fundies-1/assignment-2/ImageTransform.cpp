@@ -67,11 +67,24 @@ PNG grayscale(PNG image) {
  * @return The image with a spotlight.
  */
 PNG createSpotlight(PNG image, int centerX, int centerY) {
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+      double dist = std::sqrt((centerX - x)*(centerX - x)+(centerY - y)*(centerY - y));
+      // long distance pixel
+      if(dist > 160) {
+        pixel.l = pixel.l * 0.2;
+        continue;
+      }
+      
+      double percentDec = dist * 0.5;
 
-  return image;
+      pixel.l = (1 - (percentDec/100)) * pixel.l;
+    }
+  }
   
+  return image; 
 }
- 
 
 /**
  * Returns a image transformed to Illini colors.
@@ -84,6 +97,20 @@ PNG createSpotlight(PNG image, int centerX, int centerY) {
  * @return The illinify'd image.
 **/
 PNG illinify(PNG image) {
+
+  for (unsigned x = 0; x < image.width(); x++) {
+    for (unsigned y = 0; y < image.height(); y++) {
+      HSLAPixel & pixel = image.getPixel(x, y);
+
+      // are we closest to blue?
+      if(std::abs(pixel.h - 216) < 90) {
+        pixel.h = 216;
+      } // no, closer to orange
+      else {
+        pixel.h = 11;
+      }
+    }
+  }
 
   return image;
 }
@@ -102,6 +129,24 @@ PNG illinify(PNG image) {
 * @return The watermarked image.
 */
 PNG watermark(PNG firstImage, PNG secondImage) {
+  for (unsigned x = 0; x < secondImage.width(); x++) {
+    for (unsigned y = 0; y < secondImage.height(); y++) {
+      HSLAPixel & waterPixel = secondImage.getPixel(x, y);
+
+      if(waterPixel.l == 1.0) {
+        HSLAPixel & ogPixel = firstImage.getPixel(x, y);
+
+        double newLumin = ogPixel.l + .2;
+
+        if(newLumin > 1.0) {
+          ogPixel.l = 1.0;
+        }
+        else {
+          ogPixel.l = newLumin;
+        }
+      }
+    }
+  }
 
   return firstImage;
 }
