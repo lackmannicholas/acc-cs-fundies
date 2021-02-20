@@ -22,10 +22,10 @@ Pair *pairFactory() {
 int main() {
   Pair *p;
   p = pairFactory();
-  
+  std::cout << p->first << std::endl;
   // This function call should work without crashing:
   p->check();
-  
+  std::cout << p->first << std::endl;
   // Deallocating the heap memory. (Assuming it was made on the heap!)
   delete p;
   p = nullptr;
