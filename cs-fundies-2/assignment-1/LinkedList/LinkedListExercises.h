@@ -127,7 +127,39 @@ void LinkedList<T>::insertOrdered(const T& newData) {
   // they don't handle the null pointer at the tail properly. Be careful
   // to update all next, prev, head_, and tail_ pointers as needed on your
   // new node or on those existing nodes that are adjacent to the new node.
+  if(head_ == nullptr) head_ = new Node(newData);
 
+  Node* current = head_;
+  while(current) {
+    if(current->next == nullptr && current->data < newData) {
+      // newData is the largest value
+      current->next = new Node(newData);
+      break;
+    }
+    else if(current->prev == nullptr && current->data > newData) {
+      // newData is the smallest value
+      Node* newNode = new Node(newData);
+      newNode->next = current;
+      head_ = newNode;
+      break;
+    }
+    else if(current->prev != nullptr && current->next != nullptr) {
+      // newData is somewhere in the middle
+      if(current->next->data > newData && current->data < newData) {
+        // this is it
+        Node* newNode = new Node(newData);
+        // set newNode pointers
+        newNode->next = current->next;
+        newNode->prev = current;
+        // set current pointer
+        current->next = newNode;
+        // set current->next pointer
+        current->next->prev = newNode;
+        break;
+      }
+    }
+    current = current->next;
+  };
 }
 
 /********************************************************************
